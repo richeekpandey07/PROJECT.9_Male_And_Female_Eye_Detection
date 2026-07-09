@@ -86,15 +86,18 @@ if uploaded_file:
     img = np.array(img)/255.0
     img = np.expand_dims(img,axis=0)
 
-    prediction = model.predict(img)
+  prediction = model.predict(img)
 
-    if prediction[0][0] > 0.5:
-        result = "👨 MALE"
-        confidence = prediction[0][0] * 100
-    else:
-        result = "👩 FEMALE"
-        confidence = (1-prediction[0][0]) * 100
+score = float(prediction[0][0])
 
+if score > 0.5:
+    result = "👨 MALE"
+    confidence = score * 100
+else:
+    result = "👩 FEMALE"
+    confidence = (1 - score) * 100
+
+confidence = float(confidence)
     with col2:
 
         st.markdown(
@@ -107,7 +110,7 @@ if uploaded_file:
         )
 
         st.markdown("### 🎯 Confidence Score")
-        st.progress(confidence/100)
+st.progress(min(max(confidence / 100, 0.0), 1.0))
 
         st.metric(
             "Accuracy Confidence",
