@@ -3,15 +3,21 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from PIL import Image
 
+# --------------------------------------------------
+# Page Config
+# --------------------------------------------------
 st.set_page_config(
     page_title="👁️ Eye Gender Detection AI",
     page_icon="👁️",
     layout="wide"
 )
 
+# --------------------------------------------------
 # Custom CSS
+# --------------------------------------------------
 st.markdown("""
 <style>
+
 .main {
     background-color: #0E1117;
 }
@@ -46,10 +52,13 @@ st.markdown("""
     text-align:center;
     color:gray;
 }
+
 </style>
 """, unsafe_allow_html=True)
 
+# --------------------------------------------------
 # Header
+# --------------------------------------------------
 st.markdown(
     '<p class="title">👁️ Eye Gender Detection AI</p>',
     unsafe_allow_html=True
@@ -60,20 +69,31 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Load model
-model = load_model("my_model.keras")
+# --------------------------------------------------
+# Load Model
+# --------------------------------------------------
+try:
+    model = load_model("my_model.keras")
+except Exception as e:
+    st.error(f"Error Loading Model: {e}")
+    st.stop()
 
-# Upload
+# --------------------------------------------------
+# Upload Image
+# --------------------------------------------------
 uploaded_file = st.file_uploader(
     "📤 Upload Eye Image",
-    type=["jpg","jpeg","png"]
+    type=["jpg", "jpeg", "png"]
 )
 
-if uploaded_file:
+# --------------------------------------------------
+# Prediction
+# --------------------------------------------------
+if uploaded_file is not None:
 
     image = Image.open(uploaded_file).convert("RGB")
 
-    col1, col2 = st.columns([1,1])
+    col1, col2 = st.columns([1, 1])
 
     with col1:
         st.image(
@@ -82,25 +102,27 @@ if uploaded_file:
             use_container_width=True
         )
 
-    img = image.resize((299,299))
-    img = np.array(img)/255.0
-    img = np.expand_dims(img,axis=0)
+    # Preprocessing
+    img = image.resize((299, 299))
+    img = np.array(img) / 255.0
+    img = np.expand_dims(img, axis=0)
 
-    prediction = model.predict(img)
+    # Prediction
+    prediction = model.predict(img, verbose=0)
 
     score = float(prediction[0][0])
 
-if score > 0.5:
-    result = "👨 MALE"
-    confidence = score * 100
-else:
-    result = "👩 FEMALE"
-    confidence = (1 - score) * 100
+    if score > 0.5:
+        result = "👨 MALE"
+        confidence = score * 100
+    else:
+        result = "👩 FEMALE"
+        confidence = (1 - score) * 100
 
-confidence = float(confidence)
-with col2:
+    # Result Section
+    with col2:
 
-             st.markdown(
+        st.markdown(
             f"""
             <div class="result-box">
             {result}
@@ -111,13 +133,33 @@ with col2:
 
         st.markdown("### 🎯 Confidence Score")
 
-        st.progress(min(max(confidence / 100, 0.0), 1.0))
+        progress_value = min(max(confidence / 100, 0.0), 1.0)
+        st.progress(progress_value)
 
         st.metric(
             "Accuracy Confidence",
             f"{confidence:.2f}%"
         )
 
-        st.success(
-            "Prediction Completed Successfully!"
-        )
+        st.success("Prediction Completed Successfully!")
+
+# --------------------------------------------------
+# Footer
+# --------------------------------------------------
+st.markdown("---")
+
+st.markdown("""
+### 🚀 About Project
+
+This AI model predicts gender from eye images using Deep Learning techniques.
+
+### 👨‍💻 Developer
+
+**Richeek Pandey**
+
+🔗 GitHub: https://github.com/richeekpandey07
+
+🔗 LinkedIn: https://www.linkedin.com/in/richeek-pandey
+
+⭐ If you like this project, don't forget to star the repository!
+""")
