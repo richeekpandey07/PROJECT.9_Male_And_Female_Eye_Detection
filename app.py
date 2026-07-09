@@ -86,9 +86,9 @@ if uploaded_file:
     img = np.array(img)/255.0
     img = np.expand_dims(img,axis=0)
 
-  prediction = model.predict(img)
+    prediction = model.predict(img)
 
-score = float(prediction[0][0])
+    score = float(prediction[0][0])
 
 if score > 0.5:
     result = "👨 MALE"
