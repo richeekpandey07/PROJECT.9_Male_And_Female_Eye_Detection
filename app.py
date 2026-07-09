@@ -100,7 +100,7 @@ else:
 confidence = float(confidence)
 with col2:
 
-        st.markdown(
+             st.markdown(
             f"""
             <div class="result-box">
             {result}
@@ -110,7 +110,8 @@ with col2:
         )
 
         st.markdown("### 🎯 Confidence Score")
-st.progress(min(max(confidence / 100, 0.0), 1.0))
+
+        st.progress(min(max(confidence / 100, 0.0), 1.0))
 
         st.metric(
             "Accuracy Confidence",
@@ -118,23 +119,5 @@ st.progress(min(max(confidence / 100, 0.0), 1.0))
         )
 
         st.success(
-            f"Prediction Completed Successfully!"
+            "Prediction Completed Successfully!"
         )
-
-st.markdown("---")
-
-st.markdown("""
-### 🚀 About Project
-
-This AI model predicts gender from eye images using Deep Learning techniques.
-
-### 👨‍💻 Developer
-
-**Richeek Pandey**
-
-🔗 GitHub: https://github.com/richeekpandey07
-
-🔗 LinkedIn: https://www.linkedin.com/in/richeek-pandey
-
-⭐ If you like this project, don't forget to star the repository!
-""")
