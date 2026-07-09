@@ -98,7 +98,7 @@ else:
     confidence = (1 - score) * 100
 
 confidence = float(confidence)
-    with col2:
+with col2:
 
         st.markdown(
             f"""
